@@ -4,7 +4,7 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://moonflex-backend.onrender.com/api/:path*"
+            "destination": "https://moonflex.onrender.com/api/:path*"
         },
         {
             "source": "/(.*)",
