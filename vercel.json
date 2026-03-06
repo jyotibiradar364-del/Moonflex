@@ -3,11 +3,15 @@
     "outputDirectory": "client/dist",
     "rewrites": [
         {
+            "source": "/api/:path*",
+            "destination": "https://moonflex-backend.onrender.com/api/:path*"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
     ],
     "env": {
-        "VITE_API_BASE_URL": "https://moonflex-backend.onrender.com/api"
+        "VITE_API_BASE_URL": "/api"
     }
 }
