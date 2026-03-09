@@ -26,6 +26,7 @@ API.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry) {
+            console.log("Axios got 401, entering retry logic.");
             originalRequest._retry = true;
 
             try {
@@ -50,6 +51,11 @@ API.interceptors.response.use(
             }
         }
 
+        console.error("Axios interceptor caught an error:", {
+            message: error.message,
+            status: error.response?.status,
+            data: error.response?.data
+        });
         return Promise.reject(error);
     }
 );

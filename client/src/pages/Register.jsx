@@ -35,12 +35,15 @@ export default function Register() {
             navigate('/login');
         } catch (err) {
             const data = err.response?.data;
-            if (data) {
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
                 const firstKey = Object.keys(data)[0];
                 const msg = Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey];
                 setError(msg || 'Registration failed.');
+            } else if (typeof data === 'string') {
+                setError(`Server returned an error: ${err.response.statusText || 'Unable to connect'}`);
             } else {
-                setError('Something went wrong. Please try again.');
+                console.error("Full registration error:", err);
+                setError(err.message || 'Network error: Backend server is unreachable.');
             }
         } finally {
             setLoading(false);

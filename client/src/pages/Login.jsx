@@ -20,10 +20,16 @@ export default function Login() {
             await login(uname, password);
             navigate('/');
         } catch (err) {
-            const msg =
-                err.response?.data?.detail ||
-                err.response?.data?.uname?.[0] ||
-                'Invalid credentials. Please try again.';
+            let msg = 'Invalid credentials. Please try again.';
+            const data = err.response?.data;
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
+                msg = data.detail || data.uname?.[0] || msg;
+            } else if (typeof data === 'string') {
+                msg = `Server Error: ${err.response?.statusText || 'Unable to connect'}`;
+            } else if (err.message) {
+                msg = err.message;
+            }
+            console.error("Full login error:", err);
             setError(msg);
         } finally {
             setLoading(false);
