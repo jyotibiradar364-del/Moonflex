@@ -4,6 +4,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 
+import { useEffect } from 'react';
+import API from './api/axios';
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -33,6 +36,11 @@ const PublicRoute = ({ children }) => {
 };
 
 function App() {
+  useEffect(() => {
+    // Ping the backend to wake up the free Render instance
+    API.get('/movies/latest/').catch(() => {});
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>

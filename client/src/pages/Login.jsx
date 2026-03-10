@@ -25,7 +25,12 @@ export default function Login() {
             if (data && typeof data === 'object' && !Array.isArray(data)) {
                 msg = data.detail || data.uname?.[0] || msg;
             } else if (typeof data === 'string') {
-                msg = `Server Error: ${err.response?.statusText || 'Unable to connect'}`;
+                const status = err.response?.status;
+                if (status === 504 || status === 502 || data.includes('504 Gateway Timeout') || data.includes('502 Bad Gateway')) {
+                    msg = 'The backend server is waking up. Please wait 15-30 seconds and try again.';
+                } else {
+                    msg = `Server Error: ${err.response?.statusText || 'Unable to connect'}`;
+                }
             } else if (err.message) {
                 msg = err.message;
             }

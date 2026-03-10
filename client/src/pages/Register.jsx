@@ -40,7 +40,12 @@ export default function Register() {
                 const msg = Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey];
                 setError(msg || 'Registration failed.');
             } else if (typeof data === 'string') {
-                setError(`Server returned an error: ${err.response.statusText || 'Unable to connect'}`);
+                const status = err.response?.status;
+                if (status === 504 || status === 502 || data.includes('504 Gateway Timeout') || data.includes('502 Bad Gateway')) {
+                    setError('The backend server is waking up. Please wait 15-30 seconds and click Sign Up again.');
+                } else {
+                    setError(`Server returned an error: ${err.response.statusText || 'Unable to connect'}`);
+                }
             } else {
                 console.error("Full registration error:", err);
                 setError(err.message || 'Network error: Backend server is unreachable.');
