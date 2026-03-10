@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.PROD ? 'https://moonflex.onrender.com/api' : '/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -32,7 +32,7 @@ API.interceptors.response.use(
             try {
                 const tokens = JSON.parse(localStorage.getItem('tokens'));
                 if (tokens?.refresh) {
-                    const baseUrl = '/api';
+                    const baseUrl = import.meta.env.PROD ? 'https://moonflex.onrender.com/api' : '/api';
                     const { data } = await axios.post(
                         `${baseUrl}/auth/token/refresh/`,
                         { refresh: tokens.refresh }
